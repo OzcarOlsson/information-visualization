@@ -1,0 +1,5 @@
+.wrapper {
+  display: flex;
+  /* border: 1px solid red; */
+  height: 75vh;
+}
