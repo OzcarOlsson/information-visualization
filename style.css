@@ -1,5 +1,52 @@
-.wrapper {
+body {
+  background-color: #bebebe;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  /* background-color: #ededed; */
   /* border: 1px solid red; */
-  height: 75vh;
+  width: 100vw;
+  height: 100vh;
+}
+
+#topWrapper {
+  height: 75%;
+  /* background-color: #ededed; */
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+#graphContainer {
+  width: 70%;
+  height: 95%;
+  background-color: white;
+  border-radius: 5px;
+}
+
+#rightContainer {
+  width: 27%;
+  height: 95%;
+  background-color: white;
+  border-radius: 5px;
+}
+
+#bottomContainer {
+  width: 95%;
+  margin-top: 10px;
+  background-color: white;
+  height: 23%;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
