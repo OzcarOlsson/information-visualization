@@ -35,6 +35,14 @@ body {
   border-radius: 5px;
 }
 
+.selectionContainer {
+  margin: 10px;
+  height: 50px;
+
+  display: flex;
+  flex-direction: column;
+}
+
 #rightContainer {
   width: 27%;
   height: 95%;
@@ -49,4 +57,20 @@ body {
   height: 23%;
   border-radius: 5px;
   margin-bottom: 10px;
+}
+
+.textBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  background-color: #ededed;
+  border-radius: 5px;
+  padding: 5px;
+  border: 0.5px solid #d1d1d1;
+}
+
+.boxInfo {
+  font-size: 10pt;
 }

@@ -11,17 +11,18 @@
 		/* 13. Basic Styling with CSS */
 		
 		/* Style the lines by removing the fill and applying a stroke */
-		.line {
+		/* .line {
 				/* fill: none;
 				stroke: #ffab00;
 				stroke-width: 3; */
-		}
+		 
 		
 		/* Style the dots by assigning a fill and stroke */
 		.dot {
 				fill: #ffab00;
 				stroke: #fff;
 		}
+
 		
 		</style>
 
@@ -34,6 +35,8 @@
 	<!-- JS-legendernas filer -->
 	<script src="./js/main.js" defer></script>
 	<script src="./js/lineChart.js" defer></script>
+	<!-- <script src="./js/testChart.js" defer></script> -->
+
 
 </head>
 <body>
@@ -41,14 +44,17 @@
 		<div id="topWrapper">
 			<div id="graphContainer"> 
 				<!-- <svg class="line-chart"></svg> -->
-				<label for="selection" style="margin:10px">Choose a country</label>
 				<!-- <select name="country" id="countrySelector"  style="width: 100px;">
 					<option selected="selected" value="Sweden"> Sweden </option>
 				</select> -->
-				<div style="margin:10px">
-					<select id="selectButton" name="selection" style="width:200px;"></select>
-
+				<div class="selectionContainer">
+					<label for="selection" >Choose a country:</label>
+					<select id="selectButton" name="selection" style="width:200px;"><option>Sweden</option></select>
+					
 				</div>
+				<!-- <div id="graphInfo">
+					hello
+				</div> -->
 			</div>
 			<div id="rightContainer"> Något annat tourigt här kanske</div>
 		</div>

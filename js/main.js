@@ -17,8 +17,8 @@ const init = () => {
 
     // let selected = document.getElementById('countrySelector').value
     // console.log(selected)
-
-    lineChart(data, countryArr)
+    // lc = new testChart(data, countryArr)
+    lc = new lineChart(data, countryArr)
     // parseData(data);
   })
 }
