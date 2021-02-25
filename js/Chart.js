@@ -1,7 +1,8 @@
-function chart(data, arr){
+function mychart(data, arr){
 
     const data2 = parseData(data)
 
+    //Parse the data to [YYYY-MM-DD, name, avarageTemperature]
     function parseData(d) {
       let temp = []
 
@@ -16,7 +17,6 @@ function chart(data, arr){
                 })
               }
           }
-        
       }
       return temp
     }
@@ -32,7 +32,9 @@ function chart(data, arr){
         let dummy = 0;
         
         for(let j = 0; j < arr.length; j++){
+            dummy = 0;
             let counter = 0;
+            //index i will start depending if sorting a specific interval. Might have to change this.
             for (let i = (d.length-years); i < d.length; i++) {
                 if(d[i].name == arr[j]){
                     dummy += d[i].avgTemp;
@@ -45,24 +47,45 @@ function chart(data, arr){
         return avg;
     }
 
+    //Initiate a map and add both the countries names and the calculated avarage temperature deviation.
+    let myMap = new Map();
+
+    for (let i = 0; i < arr.length; i++) {
+        myMap.set(arr[i], y[i]);
+    }
+
+
+    //Sort the map based on the largest deviations.
+    myMap = new Map([...myMap.entries()].sort(function(a,b){return b[1]-a[1]}));
+
 
     let a = document.getElementById("bottomContainer");
+    a.textContent = "";
 
-    a.textContent = ("Avarage temperature deviation for " + arr[0] + " is: " + parseFloat(y).toFixed(3) + "°C")
-
-
-    
-
-
-    //Calculates the indices that will be the n amount of highest deviations (for a time period k)
-    function huh(){
-
+    let tempcounter = 0;
+    let h = []
+    for(const [key,value] of myMap.entries()){
+        if(tempcounter > 9) break; 
+        // a.textContent += ("\n Avarage temperature deviation for " + key + " is: " + parseFloat(value).toFixed(3) + "°C")
+        
+        h.push({country : key, temp: value});
+        tempcounter++;
     }
 
-    for (let i = 1; i < 10; i++) {
-        a.textContent += ("\n Avarage temperature deviation for " + arr[i] + " is: " + parseFloat(y[i]).toFixed(3) + "°C")
-    }
+    let width = 200,
+    barHeight = 2;
+    console.log(h)
     
+    // console.log(myMap);
 
-    // console.log(data2);
-}
+    let chart = d3.select("#testTable")
+    .selectAll('myList')
+    .append('li')
+    .data(h)
+    .enter()
+    .append('li')
+    .text(function(d){
+        return (d.country + " : " + (d.temp).toFixed(3) + "°C");
+    })
+
+ }
