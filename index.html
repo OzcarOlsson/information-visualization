@@ -35,6 +35,8 @@
 	<!-- JS-legendernas filer -->
 	<script src="./js/main.js" defer></script>
 	<script src="./js/lineChart.js" defer></script>
+	<script src="./js/cList.js" defer></script>
+
 	<!-- <script src="./js/testChart.js" defer></script> -->
 
 
@@ -44,19 +46,21 @@
 		<div id="topWrapper">
 			<div id="graphContainer"> 
 				<!-- <svg class="line-chart"></svg> -->
-				<!-- <select name="country" id="countrySelector"  style="width: 100px;">
+				<!-- <select name="country" id="coun2trySelector"  style="width: 100px;">
 					<option selected="selected" value="Sweden"> Sweden </option>
 				</select> -->
 				<div class="selectionContainer">
 					<label for="selection" >Choose a country:</label>
-					<select id="selectButton" name="selection" style="width:200px;"><option>Sweden</option></select>
+					<select id="selectButton" name="selection" style="width:200px;"><option class="listRow">Sweden</option></select>
 					
 				</div>
 				<!-- <div id="graphInfo">
 					hello
 				</div> -->
 			</div>
-			<div id="rightContainer"> Något annat tourigt här kanske</div>
+			<div id="rightContainer">Average temperature deviation 
+				<ul id="countryTable"></ul>
+			</div>
 		</div>
 		<div id="bottomContainer" >Lite touriga verktyg eller ngt sånt</div>
 	</div>

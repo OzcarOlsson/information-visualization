@@ -1,7 +1,4 @@
 function lineChart(data, countryArr) {
-  // console.log(data);
-  // console.log("hej från linechart");
-
   const data2 = parseData(data)
 
   function parseData(d) {
@@ -154,6 +151,14 @@ function lineChart(data, countryArr) {
     d3.select('#t').remove()
   }
 
+  let selectElement = document.querySelector('#countryTable')
+
+  selectElement.querySelectorAll('p.country').forEach((test) => {
+    test.addEventListener('click', (e) => {
+      update(e.target.id)
+    })
+  })
+
   function update(selectedOption) {
     console.log(selectedOption)
 
@@ -167,17 +172,13 @@ function lineChart(data, countryArr) {
         })
       }
     }
-    // console.log(temp)
-    // console.log(textis.datum(selectedOption).attr('p').innerHTML)
-    // textis.attr('p').text(selectedOption)
 
     let s = (document.getElementById('graphHeadline').innerHTML = `Showing ${selectedOption}`)
-    console.log(s)
-    // .innerHTML(`Showing ${selectedOption}`)
+
     line
       .datum(temp)
       .transition()
-      .duration(500)
+      .duration(1000)
       .attr(
         'd',
         d3
@@ -191,11 +192,9 @@ function lineChart(data, countryArr) {
       )
       .attr('stroke', 'blue')
 
-    let sa = svg.selectAll('.dot').datum(temp).remove().transition().duration(1000)
+    let circ = svg.selectAll('.dot').data(temp)
 
-    svg
-      .selectAll('.dot')
-      .data(temp)
+    circ
       .enter()
       .append('circle')
       .attr('class', 'dot')
@@ -208,18 +207,19 @@ function lineChart(data, countryArr) {
       .attr('r', 5)
       .on('mouseover', handleMouseIn)
       .on('mouseout', handleMouseOut)
-    // let sa = svg
-    //   .selectAll('.dot')
-    //   .data(temp, (d) => {
-    //     return d.dt
-    //   })
-    //   .exit()
-    //   .remove()
-    // // console.log(circles)
-    console.log(sa)
-    // // circles.exit().remove()
 
-    // sa.transition().duration(1000)
+    circ
+      .transition()
+      .duration(1000)
+      .attr('cx', (d) => {
+        return x(d.dt)
+      })
+      .attr('cy', (d) => {
+        return y(d.avgTemp)
+      })
+      .attr('r', 5)
+
+    circ.exit().remove()
 
     // svg
     //   .selectAll('.dot')
@@ -234,11 +234,8 @@ function lineChart(data, countryArr) {
     //     return y(d.avgTemp)
     //   })
     //   .attr('r', 5)
-
-    // circles
-    // 	.enter()
-    // 	.append("circle")
-    // 	.attr)""
+    //   .on('mouseover', handleMouseIn)
+    //   .on('mouseout', handleMouseOut)
   }
 
   d3.select('#selectButton').on('change', function () {

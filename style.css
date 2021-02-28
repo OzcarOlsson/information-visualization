@@ -44,10 +44,32 @@ body {
 }
 
 #rightContainer {
+  padding: 10px;
   width: 27%;
   height: 95%;
   background-color: white;
   border-radius: 5px;
+  overflow: auto;
+}
+
+#countryTable {
+  list-style-type: none;
+  padding: 0;
+}
+
+.listRow {
+  display: flex;
+  justify-content: space-between;
+  max-width: 400px;
+}
+/* .listRow:hover {
+  font-weight: 700;
+} */
+.country {
+  cursor: pointer;
+}
+.country:hover {
+  font-weight: 700;
 }
 
 #bottomContainer {
