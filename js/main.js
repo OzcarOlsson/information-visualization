@@ -11,7 +11,6 @@ const init = () => {
 
     cl = new mychart(data, countryArr)
     lc = new lineChart(data, countryArr)
-    // parseData(data);
   })
 }
 

@@ -13285,79 +13285,62 @@ Zimbabwe,2016,1.303,716,ZWE
 Zimbabwe,2017,0.269,716,ZWE
 Zimbabwe,2018,0.496,716,ZWE
 Zimbabwe,2019,1.157,716,ZWE
-Africa,,,002,X06
-Åland Islands,,,248,ALA
-Americas,,,019,X21
-Annex I countries,,,,
-Antarctic Region,,,,
-Asia,,,142,
-Australia and New Zealand,,,053,
-Bermuda,,,060,BMU
-"Bonaire, Sint Eustatius and Saba",,,535,BES
-Bouvet Island,,,074,BVT
-British Indian Ocean Territory,,,086,IOT
-Caribbean,,,029,
-Central America,,,013,
-Central Asia,,,143,
-Central Asia and Southern Asia,,,,
-Côte d'Ivoire,,,384,CIV
-Curaçao,,,531,CUW
-East Asia (excluding China),,,223,
-Eastern Africa,,,014,
-Eastern Asia,,,030,
-Eastern Asia and South-eastern Asia,,,753,
-Eastern Europe,,,151,
-Europe,,,150,
-European Union (27),,,,
-European Union (28),,,097,
-Germany Fr,,,280,
-Germany Nl,,,278,
-Guam,,,316,GUM
-Heard and McDonald Islands,,,334,HMD
-High-income economies,,,,
-Jersey,,,832,JEY
-Johnston Island,,,396,JTN
-Land Locked Developing Countries,,,432,
-Latin America and the Caribbean,,,419,
-Least Developed Countries,,,199,
-Low income economies,,,,
-Low Income Food Deficit Countries,,,,
-Lower-middle-income economies,,,,
-Melanesia,,,054,
-Micronesia,,,057,
-Middle Africa,,,017,
-Net Food Importing Developing Countries,,,,
-Non-Annex I countries,,,,
-North Africa (excluding Sudan),,,746,
-Northern Africa,,,015,
-Northern America,,,021,
-Northern America and Europe,,,,
-Northern Europe,,,154,
-Northern Mariana Islands,,,580,MNP
-Oceania,,,009,
-Oceania excluding Australia and New Zealand,,,,
-OECD,,,198,
-Polynesia,,,061,
-Réunion,,,638,REU
-Saint Barthélemy,,,652,BLM
-Saint-Martin (French part),,,663,MAF
-Serbia (excluding Kosovo),,,,
-Sint Maarten (Dutch part),,,534,SXM
-Small Island Developing States,,,722,
-South America,,,005,
-South Asia (excluding India),,,,
-South-eastern Asia,,,035,
-Southern Africa,,,018,
-Southern Asia,,,034,
-Southern Europe,,,039,
-Sub-Saharan Africa,,,202,
-Sub-Saharan Africa (including Sudan),,,738,
-United States Minor Outlying Islands,,,581,UMI
-Upper-middle-income economies,,,,
-Western Africa,,,011,
-Western Asia,,,145,
-Western Asia and Northern Africa,,,,
-Western Europe,,,155,
-World,,,001,X01
-Yemen Ar Rp,,,886,
-Yemen Dem,,,720,
+World,1961,0.207,001,X01
+World,1962,0.034,001,X01
+World,1963,0.159,001,X01
+World,1964,-0.253,001,X01
+World,1965,-0.226,001,X01
+World,1966,0.201,001,X01
+World,1967,-0.114,001,X01
+World,1968,-0.12,001,X01
+World,1969,-0.09,001,X01
+World,1970,0.153,001,X01
+World,1971,-0.092,001,X01
+World,1972,-0.195,001,X01
+World,1973,0.275,001,X01
+World,1974,-0.181,001,X01
+World,1975,0.09,001,X01
+World,1976,-0.311,001,X01
+World,1977,0.271,001,X01
+World,1978,0.004,001,X01
+World,1979,0.225,001,X01
+World,1980,0.33,001,X01
+World,1981,0.439,001,X01
+World,1982,0.078,001,X01
+World,1983,0.452,001,X01
+World,1984,0.12,001,X01
+World,1985,-0.034,001,X01
+World,1986,0.238,001,X01
+World,1987,0.391,001,X01
+World,1988,0.549,001,X01
+World,1989,0.326,001,X01
+World,1990,0.636,001,X01
+World,1991,0.458,001,X01
+World,1992,0.183,001,X01
+World,1993,0.346,001,X01
+World,1994,0.501,001,X01
+World,1995,0.831,001,X01
+World,1996,0.354,001,X01
+World,1997,0.656,001,X01
+World,1998,0.992,001,X01
+World,1999,0.788,001,X01
+World,2000,0.735,001,X01
+World,2001,0.836,001,X01
+World,2002,1.018,001,X01
+World,2003,0.896,001,X01
+World,2004,0.914,001,X01
+World,2005,1.103,001,X01
+World,2006,1.001,001,X01
+World,2007,1.198,001,X01
+World,2008,0.938,001,X01
+World,2009,0.967,001,X01
+World,2010,1.228,001,X01
+World,2011,0.923,001,X01
+World,2012,1.081,001,X01
+World,2013,1.021,001,X01
+World,2014,1.052,001,X01
+World,2015,1.419,001,X01
+World,2016,1.674,001,X01
+World,2017,1.44,001,X01
+World,2018,1.301,001,X01
+World,2019,1.473,001,X01

@@ -1,7 +1,4 @@
 function testChart(data, countryArr) {
-  // console.log(data);
-  // console.log("hej från linechart");
-
   const data2 = parseData(data)
 
   function parseData(d) {
