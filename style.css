@@ -50,3 +50,21 @@ body {
   border-radius: 5px;
   margin-bottom: 10px;
 }
+
+#testTable{
+  font-family: Arvo;
+}
+
+#testClass{
+  overflow: inherit;
+}
+.stop-start{
+  stop-color: red;
+}
+.stop-end{
+  stop-color: white;
+}
+
+.filled{
+  fill: url(#gradient);
+}
