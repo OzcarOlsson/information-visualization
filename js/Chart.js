@@ -2,6 +2,11 @@ function mychart(data, arr){
 
     let amtYears = 20;
 
+    let flag = false;
+    let maxVal;
+
+    let itrer=4;
+
     const data2 = parseData(data)
 
     //Parse the data to [YYYY-MM-DD, name, avarageTemperature]
@@ -53,8 +58,7 @@ function mychart(data, arr){
     let barHeight = 30;
     let width = 200;
 
-    var x = d3.scaleLinear()
-        .range([0, width]);
+    var x = d3.scaleLinear().range([0, width]);
 
 
     //Select SVG-element with ID testClass
@@ -64,24 +68,38 @@ function mychart(data, arr){
     .enter()
     .append("g")
     //Remove 1.04 for the spacing, thought it gave it some breathing.
-    .attr("transform", function(d, i) { return "translate(0," + i * barHeight * 1.04+ ")"; });
-
+    .attr("transform", function(d, i) { return "translate(0," + i * barHeight * 1.04+ ")"; })
+    
+    
+    
+    
     //Create the gradient element that will fill out the deviation bar.
-    let grad = my.append("defs").append("linearGradient").attr("id", "gradient");
-    grad.append("stop").style("stop-color", "red").attr("offset", "0");
-    grad.append("stop").style("stop-color", "red").attr("offset", "0.5");
-    grad.append("stop").style("stop-color", "white").attr("offset", "1")
-    .style("border-style", "solid")
-    .style("border-width", "thin")
+    // let grad = my.append("defs").append("linearGradient").attr("id", "gradient");
+    // grad.append("stop").style(
+    //     "stop-color", function(d) {
+    //         let aa = calcColor(d.tmp);
+    //         console.log(aa)
+    //         return aa;
+    //     }
+    // ).attr("offset", "0");
+    // // grad.append("stop").style("stop-color", function(d){return calcColor(d.tmp)}).attr("offset", "0.5");
+    // // grad.append("stop").style("stop-color", "white").attr("offset", "1")
+    // grad.style("border-style", "solid")
+    // .style("border-width", "thin")
     
     
     
     //Create a rect-element and set width and height.
     my.append("rect")
-      .attr("width", function(d) { return x(d.tmp/1.5); })
+      .attr("width", function(d) { return x(d.tmp/1.3); })
       .attr("height", barHeight - 1)
-      .classed('filled', true)
+    //   .attr("class", "filled")
       .style("stroke", "black")
+      .style("fill", function(d) {
+            let jj = calcColor(d.tmp)
+            console.log(jj);
+            return jj}
+          )
       
       
 
@@ -90,20 +108,41 @@ function mychart(data, arr){
     // .attr("p", d.country + "  " + d.beginVal + " - " + (d.beginVal + d.Years- 1))
     .attr("y", barHeight / 2)
     .attr("dy", ".35em")
+    .attr("x", 5)
     .style("font-family", "Arvo")
-    // .attr("fill", "white");
+    .attr("fill", "white");
 
     my.append("text").text(function(d){return d.country})
     .attr("y", barHeight / 2)
     .attr("dy", ".35em")
+    .attr("x", function(d){return (d.tmp*150)})
+    .attr("text-anchor", "end")
     .style("font-family", "Arvo")
-    .style("margin-left", "10px");
+    .style("margin-left", "10px")
 
-    my.style("justify-content", "space-evenly");
+    
+    function calcColor(dd){
+        let G = 0;
+        let R;
+        if(!flag){
+            maxVal = 255/(dd);
+            flag = true;
+            R = dd*maxVal*2;
+            G = dd*maxVal/4;
+        }
+        else{
+            console.log(maxVal/dd);
+            G = Math.pow(maxVal/(dd*4),1.8);
+            R = Math.pow(dd*maxVal,1.1);
+        }
+        let returnArr = [];
+        returnArr.push(R.toFixed(0));
+        returnArr.push(G.toFixed(0));
+        returnArr.push(0);
 
-
-    function calcColor(){
-        return "(250,50,50)"
+        let returnRGB = 'rgb(' + returnArr.join(',') + ')'
+        // console.log(returnRGB)
+        return returnRGB;
     }
     
 

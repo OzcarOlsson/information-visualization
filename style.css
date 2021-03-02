@@ -57,12 +57,7 @@ body {
 
 #testClass{
   overflow: inherit;
-}
-.stop-start{
-  stop-color: red;
-}
-.stop-end{
-  stop-color: white;
+  margin-left: 1vw;
 }
 
 .filled{
