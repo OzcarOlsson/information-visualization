@@ -3,3 +3,8 @@
   /* border: 1px solid red; */
   height: 75vh;
 }
+
+.selected {
+	fill: yellow;
+}
+
