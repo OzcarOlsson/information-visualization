@@ -1,8 +1,17 @@
 function lineChart(data, countryArr) {
   const data2 = parseData(data)
-  let visOptions = { firstLine: true, secondLine: true, regLine: true, secondRegLine: true }
 
-  const leastSquareLine = leastSquare(data2)
+  let visOptions = {
+    firstLine: true,
+    secondLine: false,
+    regLine: true,
+    secondRegLine: true,
+    futureLine: false,
+    refresh: false,
+  }
+
+  const ls = leastSquare(data2)
+  const leastSquareLine = [ls[0], ls[1]]
 
   function parseData(d) {
     let temp = []
@@ -27,6 +36,28 @@ function lineChart(data, countryArr) {
   let height = svgHeight - margin.top - margin.bottom
 
   d3.select('#graphContainer').append('p').attr('id', 'graphHeadline').attr('style', 'margin-left: 10px').text('Showing (Sweden)')
+  // Future prediciton
+  d3.select('#futureButton').on('click', () => {
+    // visOptions.firstLine = true
+    // visOptions.secondLine = false
+    // visOptions.regLine = false
+    // visOptions.secondRegLine = false
+    visOptions.futureLine = true
+    let choice = d3.select('#selectButton').property('value')
+    update(choice, visOptions)
+
+    let compChoice = d3.select('#compareSelect').property('value')
+
+    if (compChoice != 'None') compareLine(compChoice, visOptions)
+  })
+
+  d3.select('#historyButton').on('click', () => {
+    visOptions.futureLine = false
+    visOptions.refresh = true
+    let choice = d3.select('#selectButton').property('value')
+    update(choice, visOptions)
+    // compareLine('', visOptions)
+  })
 
   let svg = d3
     .select('#graphContainer')
@@ -137,6 +168,7 @@ function lineChart(data, countryArr) {
   let line = svg
     .append('g')
     .append('path')
+    .attr('class', 'firstLine')
     .datum(data2)
     .attr(
       'd',
@@ -156,6 +188,7 @@ function lineChart(data, countryArr) {
     .style('opacity', 0.5)
 
   // Least-Square Line
+
   let lsLine = svg
     .append('g')
     .append('path')
@@ -240,99 +273,124 @@ function lineChart(data, countryArr) {
       }
     }
 
-    let str = document.getElementById('graphHeadline').innerHTML
-    if (str.includes('compared')) {
-      let modifiedStr = str.split('compared')
-      document.getElementById('graphHeadline').innerHTML = `Showing (${selectedOption}) compared ${modifiedStr[1]}`
+    if (visOpt.futureLine) {
+      futurePred(temp)
     } else {
-      document.getElementById('graphHeadline').innerHTML = `Showing (${selectedOption})`
-    }
-
-    //Legend update
-    d3.select('#legend text').text(selectedOption)
-    d3.select('#legend').attr('width', 150)
-    d3.select('#legend text').style('font-size', '16px')
-    if (selectedOption.length > 15 && selectedOption.length < 23) {
-      d3.select('#legend').attr('width', 200)
-    }
-    if (selectedOption.length > 23) {
-      d3.select('#legend').attr('width', 260)
-      if (selectedOption.length > 30) {
-        d3.select('#legend text').style('font-size', '12px')
+      // Graph Headline
+      let str = document.getElementById('graphHeadline').innerHTML
+      if (str.includes('compared')) {
+        let modifiedStr = str.split('compared')
+        document.getElementById('graphHeadline').innerHTML = `Showing (${selectedOption}) compared ${modifiedStr[1]}`
       } else {
-        d3.select('#legend text').style('font-size', '14px')
+        document.getElementById('graphHeadline').innerHTML = `Showing (${selectedOption})`
       }
+
+      //Legend update
+      d3.select('#legend text').text(selectedOption)
+      d3.select('#legend').attr('width', 150)
+      d3.select('#legend text').style('font-size', '16px')
+      if (selectedOption.length > 15 && selectedOption.length < 23) {
+        d3.select('#legend').attr('width', 200)
+      }
+      if (selectedOption.length > 23) {
+        d3.select('#legend').attr('width', 260)
+        if (selectedOption.length > 30) {
+          d3.select('#legend text').style('font-size', '12px')
+        } else {
+          d3.select('#legend text').style('font-size', '14px')
+        }
+      }
+
+      if (visOpt.refresh) {
+        // Axis update
+        // Rescale axes
+        x.domain(
+          d3.extent(temp, (d) => {
+            return d.dt
+          })
+        )
+        y.domain(
+          d3.extent(temp, (d) => {
+            return d.avgTemp
+          })
+        )
+      }
+
+      svg.select('.x-axis').transition().duration(1500).call(xAxis)
+      svg.select('.y-axis').transition().duration(1500).call(yAxis)
+
+      let lineData = visOpt.firstLine ? temp : []
+      // let lineData = temp
+
+      line
+        .datum(lineData)
+        .transition()
+        .duration(1000)
+        .attr(
+          'd',
+          d3
+            .line()
+            .x((d) => {
+              return x(d.dt)
+            })
+            .y((d) => {
+              return y(d.avgTemp)
+            })
+        )
+        .attr('stroke', '#ffab00')
+
+      // Update sqLine
+      let nd = leastSquare(temp)
+      let newData = visOpt.regLine ? [nd[0], nd[1]] : []
+
+      lsLine
+        .datum(newData)
+        .transition()
+        .duration(1000)
+        .attr(
+          'd',
+          d3
+            .line()
+            .x((d) => {
+              return x(d.xVal)
+            })
+            .y((d) => {
+              return y(d.yVal)
+            })
+        )
+        .attr('stroke', 'green')
+        .style('stroke-width', 2)
+        .style('full', 'none')
+
+      let circ = svg.selectAll('.dot').data(lineData)
+
+      circ
+        .enter()
+        .append('circle')
+        .attr('class', 'dot')
+        .attr('cx', (d) => {
+          return x(d.dt)
+        })
+        .attr('cy', (d) => {
+          return y(d.avgTemp)
+        })
+        .attr('r', 5)
+        .on('mouseover', handleMouseIn)
+        .on('mouseout', handleMouseOut)
+
+      circ
+        .transition()
+        .duration(1000)
+        .attr('cx', (d) => {
+          return x(d.dt)
+        })
+        .attr('cy', (d) => {
+          return y(d.avgTemp)
+        })
+        .attr('r', 5)
+
+      circ.exit().remove()
     }
-
-    let lineData = visOpt.firstLine ? temp : []
-
-    line
-      .datum(lineData)
-      .transition()
-      .duration(1000)
-      .attr(
-        'd',
-        d3
-          .line()
-          .x((d) => {
-            return x(d.dt)
-          })
-          .y((d) => {
-            return y(d.avgTemp)
-          })
-      )
-      .attr('stroke', '#ffab00')
-
-    // Update sqLine
-    let newData = visOpt.regLine ? leastSquare(temp) : []
-
-    lsLine
-      .datum(newData)
-      .transition()
-      .duration(1000)
-      .attr(
-        'd',
-        d3
-          .line()
-          .x((d) => {
-            return x(d.xVal)
-          })
-          .y((d) => {
-            return y(d.yVal)
-          })
-      )
-      .attr('stroke', 'green')
-      .style('stroke-width', 2)
-      .style('full', 'none')
-
-    let circ = svg.selectAll('.dot').data(lineData)
-
-    circ
-      .enter()
-      .append('circle')
-      .attr('class', 'dot')
-      .attr('cx', (d) => {
-        return x(d.dt)
-      })
-      .attr('cy', (d) => {
-        return y(d.avgTemp)
-      })
-      .attr('r', 5)
-      .on('mouseover', handleMouseIn)
-      .on('mouseout', handleMouseOut)
-
-    circ
-      .transition()
-      .duration(1000)
-      .attr('cx', (d) => {
-        return x(d.dt)
-      })
-      .attr('cy', (d) => {
-        return y(d.avgTemp)
-      })
-      .attr('r', 5)
-
-    circ.exit().remove()
   }
 
   // Onchange event for dropdown list with countries
@@ -345,7 +403,22 @@ function lineChart(data, countryArr) {
   let counter = 0
   // Line for the country to compare with defaults to none
   function compareLine(selectedCompare, visOpt) {
-    if (counter == 0) {
+    let temp = []
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].country_name == selectedCompare) {
+        temp.push({
+          dt: new Date(data[i].year),
+          avgTemp: +data[i].value,
+          country: data[i].country_name,
+        })
+      }
+    }
+
+    if (visOpt.futureLine && counter != 0) {
+      futurePred(temp)
+    }
+
+    if (counter == 0 && !visOpt.futureLine) {
       document.getElementById('graphHeadline').innerHTML += ` compared to  (${selectedCompare})`
 
       //Legend
@@ -360,8 +433,8 @@ function lineChart(data, countryArr) {
         .text(selectedCompare)
         .on('click', () => {
           visOpt.secondLine = !visOpt.secondLine
-
-          compareLine(selectedCompare, visOpt)
+          let choice = d3.select('#compareSelect').property('value')
+          compareLine(choice, visOpt)
         })
 
       d3.select('#legend').append('rect').attr('x', 15).attr('y', 80).attr('width', 10).attr('height', 2).style('fill', 'blue')
@@ -377,7 +450,7 @@ function lineChart(data, countryArr) {
           visOpt.secondRegLine = !visOpt.secondRegLine
           compareLine(choice, visOpt)
         })
-    } else {
+    } else if (!visOpt.futureLine) {
       let str = document.getElementById('graphHeadline').innerHTML.split('compared')
       document.getElementById('graphHeadline').innerHTML = str[0] + ` compared to  (${selectedCompare})`
 
@@ -386,20 +459,9 @@ function lineChart(data, countryArr) {
       d3.select('.legend-second-regression-text').style('opacity', visOpt.secondRegLine ? 1.0 : 0.5)
     }
 
-    let temp = []
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].country_name == selectedCompare) {
-        temp.push({
-          dt: new Date(data[i].year),
-          avgTemp: +data[i].value,
-          country: data[i].country_name,
-        })
-      }
-    }
-
     // Draw line first time
     let lineData = visOptions.secondLine ? temp : []
-    if (counter == 0) {
+    if (counter == 0 && !visOpt.futureLine) {
       line2 = svg
         .append('g')
         .append('path')
@@ -421,7 +483,8 @@ function lineChart(data, countryArr) {
         .style('opacity', 0.3)
 
       // Linear Regression Line
-      let regressionData = leastSquare(temp)
+      let rd = leastSquare(temp)
+      let regressionData = [rd[0], rd[1]]
       lsLine2 = svg
         .append('g')
         .append('path')
@@ -476,7 +539,8 @@ function lineChart(data, countryArr) {
       }
 
       counter++
-    } else {
+      visOptions.secondLine = true
+    } else if (!visOpt.futureLine) {
       // Update legend
       d3.select('#second-text').text(selectedCompare)
 
@@ -495,7 +559,7 @@ function lineChart(data, countryArr) {
       }
 
       //Update second line
-      console.log(lineData)
+      // console.log(lineData)
       line2
         .datum(lineData)
         .transition()
@@ -513,7 +577,8 @@ function lineChart(data, countryArr) {
         )
 
       // Update 2nd Regression Line
-      let regressionData = visOpt.secondRegLine ? leastSquare(temp) : []
+      let rd = leastSquare(temp)
+      let regressionData = visOpt.secondRegLine ? [rd[0], rd[1]] : []
       lsLine2
         .datum(regressionData)
         .transition()
@@ -569,6 +634,104 @@ function lineChart(data, countryArr) {
     let selectedCompare = d3.select(this).property('value').toString()
     compareLine(selectedCompare, visOptions)
   })
+
+  // Future prediciton
+  function futurePred(selectedData) {
+    let lsData = leastSquare(selectedData)
+    let km = lsData[2]
+
+    let _x, _y
+    let size = 31
+    let year = 2020
+    let res = []
+
+    for (let i = 0; i < size; ++i) {
+      _x = year
+      _y = _x * km.kVal + km.mVal
+
+      res.push({
+        xVal: new Date(_x.toString()),
+        yVal: +_y,
+      })
+      year++
+    }
+
+    // Rescale axes
+    x.domain(
+      d3.extent(res, (d) => {
+        return d.xVal
+      })
+    )
+    y.domain(
+      d3.extent(res, (d) => {
+        return d.yVal.toFixed(2)
+      })
+    )
+
+    svg.select('.x-axis').transition().duration(1500).call(xAxis)
+    svg.select('.y-axis').transition().duration(1500).call(yAxis)
+
+    // Draw line
+    let predLineData = [res[0], res[size - 1]]
+
+    if (visOptions.secondLine) {
+      svg.selectAll('.dot2').remove()
+      line2.remove()
+      lsLine2
+        .datum(predLineData)
+        .transition()
+        .duration(1000)
+        .attr(
+          'd',
+          d3
+            .line()
+            .x((d) => {
+              return x(d.xVal)
+            })
+            .y((d) => {
+              return y(d.yVal)
+            })
+        )
+        .attr('stroke', 'blue')
+        .style('stroke-width', 2)
+        .style('full', 'none')
+    }
+    svg.selectAll('.dot').remove()
+    line
+      .datum([])
+      .transition()
+      .duration(1000)
+      .attr(
+        'd',
+        d3
+          .line()
+          .x((d) => {
+            return x(d.dt)
+          })
+          .y((d) => {
+            return y(d.avgTemp)
+          })
+      )
+
+    lsLine
+      .datum(predLineData)
+      .transition()
+      .duration(1000)
+      .attr(
+        'd',
+        d3
+          .line()
+          .x((d) => {
+            return x(d.xVal)
+          })
+          .y((d) => {
+            return y(d.yVal)
+          })
+      )
+      .attr('stroke', 'green')
+      .style('stroke-width', 2)
+      .style('full', 'none')
+  }
 }
 
 function leastSquare(parsedData) {
@@ -632,8 +795,11 @@ function leastSquare(parsedData) {
         yVal: +y,
       })
     }
+
+    let km = { kVal: k, mVal: m }
+
     let lastSlot = res.length - 1
-    let resultLine = [res[0], res[lastSlot]]
+    let resultLine = [res[0], res[lastSlot], km]
 
     // Return first and last slot to avoid rounding error
     return resultLine

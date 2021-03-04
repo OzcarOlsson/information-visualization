@@ -119,3 +119,16 @@ body {
   right: 10px;
   border-radius: 5px;
 }
+
+#futureButton {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  /* margin-left: 20px; */
+}
+
+#historyButton {
+  position: absolute;
+  bottom: 20px;
+  left: 200px;
+}
