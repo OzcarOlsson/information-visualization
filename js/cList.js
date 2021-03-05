@@ -100,7 +100,6 @@ function mychart(data, arr) {
     for (let i = 0; i < options.length; ++i) {
       if (options[i].value === obj.country) {
         options[i].selected = 'selected'
-
         break
       }
     }
