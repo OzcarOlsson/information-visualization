@@ -55,7 +55,7 @@ function mychart(data, arr){
         }
     }
     
-    let barHeight = 30;
+    let barHeight = 37;
     let width = 200;
 
     var x = d3.scaleLinear().range([0, width]);
@@ -70,57 +70,45 @@ function mychart(data, arr){
     //Remove 1.04 for the spacing, thought it gave it some breathing.
     .attr("transform", function(d, i) { return "translate(0," + i * barHeight * 1.04+ ")"; })
     
-    
-    
-    
-    //Create the gradient element that will fill out the deviation bar.
-    // let grad = my.append("defs").append("linearGradient").attr("id", "gradient");
-    // grad.append("stop").style(
-    //     "stop-color", function(d) {
-    //         let aa = calcColor(d.tmp);
-    //         console.log(aa)
-    //         return aa;
-    //     }
-    // ).attr("offset", "0");
-    // // grad.append("stop").style("stop-color", function(d){return calcColor(d.tmp)}).attr("offset", "0.5");
-    // // grad.append("stop").style("stop-color", "white").attr("offset", "1")
-    // grad.style("border-style", "solid")
-    // .style("border-width", "thin")
-    
-    
-    
     //Create a rect-element and set width and height.
     my.append("rect")
-      .attr("width", function(d) { return x(d.tmp/1.3); })
-      .attr("height", barHeight - 1)
-    //   .attr("class", "filled")
-      .style("stroke", "black")
-      .style("fill", function(d) {
-            let jj = calcColor(d.tmp)
-            console.log(jj);
-            return jj}
-          )
-      
-      
+    .attr("width", function(d) { return x(d.tmp/1); })
+    .attr("height", barHeight - 1)
+//   .attr("class", "filled")
+    .style("stroke", "black")
+    .style("fill", function(d) {
+        let jj = calcColor(d.tmp)
+        return jj}
+        )
+    .style("filter", "drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3))")
 
+    //Append a text-element that writes out the temperature
     my.append("text")
     .text(function(d){return ((d.tmp).toFixed(3) + "°C")})
-    // .attr("p", d.country + "  " + d.beginVal + " - " + (d.beginVal + d.Years- 1))
     .attr("y", barHeight / 2)
     .attr("dy", ".35em")
     .attr("x", 5)
     .style("font-family", "Arvo")
-    .attr("fill", "white");
+    .style("font-size", ".7vw")
+    .attr("fill", "white")
+    .attr("class", "testlol")
 
+    //Append another text-element that writes out the country, added some css aswell.
     my.append("text").text(function(d){return d.country})
     .attr("y", barHeight / 2)
     .attr("dy", ".35em")
-    .attr("x", function(d){return (d.tmp*150)})
+    .attr("x", function(d){return (d.tmp*196)})
     .attr("text-anchor", "end")
     .style("font-family", "Arvo")
-    .style("margin-left", "10px")
+    .style("font-size", ".7vw")
+    .style("margin-left", "1vw")
+    .style("fill", "white")
+    .attr("class", "testlol")
 
     
+    //This function takes in the individual values of the temperatures.
+    //The input is sorted from highest to lowest, so the first value will be the largest, therefore
+    //it will set the maxvalue, which will return a more "reddish" color.
     function calcColor(dd){
         let G = 0;
         let R;
@@ -131,7 +119,7 @@ function mychart(data, arr){
             G = dd*maxVal/4;
         }
         else{
-            console.log(maxVal/dd);
+            // console.log(maxVal/dd);
             G = Math.pow(maxVal/(dd*4),1.8);
             R = Math.pow(dd*maxVal,1.1);
         }
@@ -141,30 +129,29 @@ function mychart(data, arr){
         returnArr.push(0);
 
         let returnRGB = 'rgb(' + returnArr.join(',') + ')'
-        // console.log(returnRGB)
         return returnRGB;
     }
     
 
-    let lel = d3.select("#StartSpan")
-    .selectAll('option')
-    .append('option')
-    .data( yearSpan)
-    .enter()
-    .append('option')
-    .text(function(d){
-        return (d);
-    })
+    // let lel = d3.select("#StartSpan")
+    // .selectAll('option')
+    // .append('option')
+    // .data( yearSpan)
+    // .enter()
+    // .append('option')
+    // .text(function(d){
+    //     return (d);
+    // })
 
-    let lel2 = d3.select("#EndSpan")
-    .selectAll('myOption')
-    .append('option')
-    .data(yearSpan)
-    .enter()
-    .append('option')
-    .text(function(d){
-        return (d);
-    })
+    // let lel2 = d3.select("#EndSpan")
+    // .selectAll('myOption')
+    // .append('option')
+    // .data(yearSpan)
+    // .enter()
+    // .append('option')
+    // .text(function(d){
+    //     return (d);
+    // })
 
     function calcAvarage(d, years = d.length){
 
