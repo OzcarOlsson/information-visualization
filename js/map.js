@@ -1,12 +1,13 @@
 function map(world_data, temp_data){
     
     const yearRange = [...new Set(temp_data.map(item => item.year))];
-    
-    var countryData = parseData("1968"); // init
+    initYear = "1961"; // 1961-2019
+
+    var countryData = parseData(initYear); // init
 
     function parseData(year) {
         var temp = []
-        console.log("year i parsen: ", year)
+        //console.log("year i parsen: ", year)
         temp_data.forEach(function(d) { 
             if((d.year) == year){
                 temp[d.country_code] = d;
@@ -17,7 +18,7 @@ function map(world_data, temp_data){
 
     mapDiv = d3.select("#map").node()
 
-    var zoom = d3.behavior.zoom()
+    var zoom = d3.zoom()
         .scaleExtent([0.5, 8])
         .on("zoom", zoomed);
     
@@ -26,7 +27,7 @@ function map(world_data, temp_data){
     height = mapDiv.clientHeight - margin.top - margin.bottom;
     
     // Set map projection - round to flat
-    var projection = d3.geo.mercator()
+    var projection = d3.geoMercator()
         .translate([width * 0.5, height * 0.6])
         .scale(120);
     
@@ -37,7 +38,7 @@ function map(world_data, temp_data){
         .append("g");
     
     // Create path using the projection
-    var path = d3.geo.path()
+    var path = d3.geoPath()
         .projection(projection); 
 
     // Iterate Topo-data and add data about each country at chosen year      
@@ -77,31 +78,93 @@ function map(world_data, temp_data){
         // .on("mouseout", function(d) {
         //     d3.select(this).classed("selected", false)
         // })
-
-    function zoomed() {
-        var tMap = d3.event.translate;
-        var sMap = d3.event.scale;
-        zoom.translate(tMap);
-        svg.attr("transform", "translate(" + tMap + ")scale(" + sMap + ")");
-    }
     
-
-    var min_year = yearRange[0],
-        max_year = yearRange.slice(-2)[0];
+    function zoomed() {
+        const currentTransform = d3.event.transform;
+        svg.attr("transform", currentTransform);
+    }
 
     // slider
-    d3.select("#timeSlider")
-        .attr("type", "range")
-        .attr("min", min_year)
-        .attr("max", max_year)
-        .attr("step", "1")
-        .attr("id", "year")    
-        .on("input", () => {
-            update();
-        })
+    var min_year = yearRange[0],
+        max_year = yearRange.slice(-2)[0];
+    
+    let sliderYear = initYear;
 
-    function update() {
-        var sliderYear = document.getElementById("year").value;
+    // var slider = d3.select("#timeSlider")
+    //     .attr("type", "range")
+    //     //.attr("class", "slider")
+    //     .attr("min", min_year)
+    //     .attr("max", max_year)
+    //     .attr("step", "1")
+    //     .attr("id", "year")    
+    //     .on("input", () => {
+    //         sliderYear = document.getElementById("year").value;
+    //         //console.log("slidery", sliderYear);
+    //         d3.select('#sliderYearValue').text(sliderYear);
+    //         update(sliderYear);
+    //     })
+
+    var sliderSvg = d3.select("#timeSlider"),
+        margin = {right: 100, left: 50, top: 150},
+        width = 700, //svgHej.attr("width") - margin.left - margin.right,
+        height = 150; //svgHej.attr("height");
+
+    var x = d3.scaleLinear()
+        .domain([min_year, max_year])
+        .range([0, width])
+        .clamp(true);
+
+    var slider = sliderSvg.append("g")
+        .attr("class", "slider")
+        .attr("transform", "translate(" + margin.left + "," + height / 2 + ")");
+
+    slider.append("line")
+        .attr("class", "track")
+        .attr("x1", x.range()[0])
+        .attr("x2", x.range()[1])
+      .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-inset")
+      .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-overlay")
+        .call(d3.drag()
+            .on("start.interrupt", function() { slider.interrupt(); })
+            .on("start drag", function() {
+                currentValue = d3.event.x;
+                //console.log(Math.round(x.invert(currentValue)));
+                update(Math.round(x.invert(currentValue))); 
+            })
+        );
+        
+    slider.insert("g", ".track-overlay")
+        .attr("class", "ticks")
+        .attr("transform", "translate(0," + 25 + ")")
+        .selectAll("text")
+        .data(x.ticks(10))
+        .enter().append("text")
+        .attr("x", x)
+        .attr("text-anchor", "middle")
+        .text(function(d) {return d });
+
+    var handle = slider.insert("circle", ".track-overlay")
+        .attr("class", "handle")
+        .attr("r", 12);
+
+    var label = slider.append("text")  
+        .attr("class", "label")
+        .attr("text-anchor", "middle")
+        .text(initYear)
+        //.text(formatDate(min_year))
+        .attr("transform", "translate(0," + (-25) + ")")
+
+
+    function update(sliderYear) {
+        //var sliderYear = document.getElementById("year").value;
+        handle.attr("cx", x(sliderYear));
+
+        label
+            .attr("x", x(sliderYear))
+            .text(sliderYear);
+            
         updatedCountryData = parseData(sliderYear)
         
         // draw new on update/onchange
@@ -122,7 +185,6 @@ function map(world_data, temp_data){
             })
             .style('stroke', '#000')
             .style('stroke-width', '0.1')
-
     }
 
 
