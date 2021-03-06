@@ -2,6 +2,8 @@ import pandas as pd
 import csv
 import json
 
+
+########################## Merge temperature data with country data (M49 code) #############################
 dtype_year = {"Year": str} # adds .0 to year otherwise
 temp_data = pd.read_csv("./data/FAOSTAT_temp.csv", encoding="latin1", dtype=dtype_year)
 country_data = pd.read_csv("./data/FAOSTAT_ISO_3.csv", converters={'M49 Code': lambda x: str(x)})
@@ -27,3 +29,40 @@ data = pd.merge(temp_data, country_data, how="outer", on="country_name")
 with open('./data/temp_data.csv', 'w', newline='') as csvfile:
     df = pd.DataFrame(data)
     df.to_csv('./data/temp_data.csv', index=False)
+
+
+########################## Continents #############################
+with open("./data/continents-topo.json", "r") as data_file:
+    data = json.load(data_file)
+
+    # print(data["objects"]["continent"]["geometries"][:6]) # all continents (minus antarctis)
+
+    # drop dublettes :6
+    data["objects"]["continent"]["geometries"] = data["objects"]["continent"]["geometries"][:6]
+
+    data["objects"]["continent"]["geometries"][0]["properties"]["id"] = "005"
+    data["objects"]["continent"]["geometries"][1]["properties"]["id"] = "009"
+    data["objects"]["continent"]["geometries"][2]["properties"]["id"] = "021"
+    data["objects"]["continent"]["geometries"][3]["properties"]["id"] = "150"
+    data["objects"]["continent"]["geometries"][4]["properties"]["id"] = "142"
+    data["objects"]["continent"]["geometries"][5]["properties"]["id"] = "002"
+
+
+    #print(data)
+    #print(new_data)
+
+    # print(continentsData[0]["properties"])
+    # for i in continentsData:
+    #    print(i["properties"])
+    
+# TO JSON:
+with open('./data/updated_continents.json', 'w', encoding='utf8') as json_file:
+    json.dump(data, json_file, ensure_ascii=False)
+
+
+########################## World #############################
+
+
+
+
+

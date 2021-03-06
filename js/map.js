@@ -1,14 +1,32 @@
-function map(world_data, temp_data){
+function map(temperature_data, country_data, continent_data){
     
-    const yearRange = [...new Set(temp_data.map(item => item.year))];
-    initYear = "1961"; // 1961-2019
+    const yearRange = [...new Set(temperature_data.map(item => item.year))];
+    let sliderYear = "1961"; // 1961-2019
+    
+    let mapSelection = {
+        //init:
+        name: "country",
+        data: country_data,
+    }
 
-    var countryData = parseData(initYear); // init
+    // Selection of map-data
+    d3.select("#countryButton").on("click", () => {
+        mapSelection.name = "country";
+        mapSelection.data = country_data;
+        update(sliderYear, mapSelection)
+    })
+
+    d3.select("#continentButton").on("click", () => {
+        mapSelection.name = "continent";
+        mapSelection.data = continent_data;
+        update(sliderYear, mapSelection)
+    })
+
+    var updatedTempData = parseData(sliderYear); // init
 
     function parseData(year) {
         var temp = []
-        //console.log("year i parsen: ", year)
-        temp_data.forEach(function(d) { 
+        temperature_data.forEach(function(d) { 
             if((d.year) == year){
                 temp[d.country_code] = d;
             }
@@ -40,16 +58,27 @@ function map(world_data, temp_data){
     // Create path using the projection
     var path = d3.geoPath()
         .projection(projection); 
-
+    
     // Iterate Topo-data and add data about each country at chosen year      
-    function topoCountries(countryData) {
-        let countries = topojson
-            .feature(world_data, world_data.objects.countries)
-            .features.map(function(data) {
-                data.properties = countryData[data.id];
-                return data 
-            });    
-        return countries;
+    function topoCountries(updatedTempData, mapSelection) {
+        let map; 
+
+        if (mapSelection.name == "country"){
+            map = topojson
+                .feature(mapSelection.data, mapSelection.data.objects.countries)
+                .features.map(function(data) {
+                        data.properties = updatedTempData[data.id];
+                        return data 
+                    });   
+        } else {
+            map = topojson
+                .feature(mapSelection.data, mapSelection.data.objects.continent)
+                .features.map(function(data) {
+                    data.properties = updatedTempData[data.properties.id];           
+                    return data
+                });
+        }
+        return map;
     }
     
     const temp_range = [-0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3];
@@ -57,8 +86,8 @@ function map(world_data, temp_data){
         .range(["#FFFFB7", "#FFCE03", "#FD9A01","#FD6104","#FF2C05","#F00505"])
         .domain(temp_range);
 
-    let mapTest = svg.selectAll("path")
-        .data(topoCountries(countryData))
+    let worldMap = svg.selectAll("path")
+        .data(topoCountries(updatedTempData, mapSelection))
         .enter().append("path")
         .attr("d", path)
         .style("fill", function(d){
@@ -71,14 +100,50 @@ function map(world_data, temp_data){
         })
         .style('stroke', '#000')
         .style('stroke-width', '0.1')
-        // .on("mouseover", function(d) {
-        //     d3.select(this).classed("selected", true)
-        //     //console.log(countries[d.id]);
-        // })
-        // .on("mouseout", function(d) {
-        //     d3.select(this).classed("selected", false)
-        // })
+        .on("mouseover", function(d) {
+            d3.select(this).classed("selected", true)
+            if (!d.properties) {
+                return
+            }
+            mouseOn(updatedTempData[d.properties.country_code], mapSelection)
+        })
+        .on("mouseout", function(d) {
+            d3.select(this).classed("selected", false)
+            mouseOff()
+        })
     
+    // Define the div for the tooltip
+    var div = d3.select("#map").append("div") 
+        .attr("class", "tooltip")				
+        .style("opacity", 0);
+
+    function mouseOn(cData, mapSelection) {
+
+        if(!cData){
+            return
+        } else {
+            let name = "";
+            if (mapSelection.name == "country"){
+                name = "Country";
+            } else if (mapSelection.name == "continent") {
+                name = "Continent";
+            }
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);
+            div.html(name + ": " + cData.country_name + "<br/>"  + "Temp. change: " + cData.value)	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");
+        }
+    }
+
+    function mouseOff() {
+        div.transition()		
+            .duration(500)		
+            .style("opacity", 0);	
+        d3.select('tooltip').remove()
+    }
+
     function zoomed() {
         const currentTransform = d3.event.transform;
         svg.attr("transform", currentTransform);
@@ -87,27 +152,11 @@ function map(world_data, temp_data){
     // slider
     var min_year = yearRange[0],
         max_year = yearRange.slice(-2)[0];
-    
-    let sliderYear = initYear;
-
-    // var slider = d3.select("#timeSlider")
-    //     .attr("type", "range")
-    //     //.attr("class", "slider")
-    //     .attr("min", min_year)
-    //     .attr("max", max_year)
-    //     .attr("step", "1")
-    //     .attr("id", "year")    
-    //     .on("input", () => {
-    //         sliderYear = document.getElementById("year").value;
-    //         //console.log("slidery", sliderYear);
-    //         d3.select('#sliderYearValue').text(sliderYear);
-    //         update(sliderYear);
-    //     })
 
     var sliderSvg = d3.select("#timeSlider"),
         margin = {right: 100, left: 50, top: 150},
-        width = 700, //svgHej.attr("width") - margin.left - margin.right,
-        height = 150; //svgHej.attr("height");
+        width = 700, //sliderSvg.attr("width") - margin.left - margin.right,
+        height = 150; //sliderSvg.attr("height");
 
     var x = d3.scaleLinear()
         .domain([min_year, max_year])
@@ -130,8 +179,8 @@ function map(world_data, temp_data){
             .on("start.interrupt", function() { slider.interrupt(); })
             .on("start drag", function() {
                 currentValue = d3.event.x;
-                //console.log(Math.round(x.invert(currentValue)));
-                update(Math.round(x.invert(currentValue))); 
+                sliderYear = Math.round(x.invert(currentValue));
+                update(sliderYear, mapSelection); 
             })
         );
         
@@ -152,30 +201,29 @@ function map(world_data, temp_data){
     var label = slider.append("text")  
         .attr("class", "label")
         .attr("text-anchor", "middle")
-        .text(initYear)
-        //.text(formatDate(min_year))
+        .text(sliderYear)
         .attr("transform", "translate(0," + (-25) + ")")
 
 
-    function update(sliderYear) {
-        //var sliderYear = document.getElementById("year").value;
+    function update(sliderYear, mapSelection) {
+
         handle.attr("cx", x(sliderYear));
 
         label
             .attr("x", x(sliderYear))
             .text(sliderYear);
             
-        updatedCountryData = parseData(sliderYear)
+        updatedTempData = parseData(sliderYear)
         
         // draw new on update/onchange
-        mapTest.remove()
+        worldMap.remove()
 
-        mapTest = svg.selectAll("path")
-            .data(topoCountries(updatedCountryData))
+        worldMap = svg.selectAll("path")
+            .data(topoCountries(updatedTempData, mapSelection))
+
             .enter().append("path")
             .attr("d", path)
             .style("fill", function(d){
-                //console.log(d);
                 const value = d.properties; 
                 if (value) {
                     return color_legend(d.properties.value) 
@@ -185,35 +233,25 @@ function map(world_data, temp_data){
             })
             .style('stroke', '#000')
             .style('stroke-width', '0.1')
-    }
-
-
-
+            .on("mouseover", function(d) {
+                d3.select(this).classed("selected", true)
+                if (!d.properties) {
+                    return
+                }
+                mouseOn(updatedTempData[d.properties.country_code], mapSelection)
+            })
+            .on("mouseout", function(d) {
+                d3.select(this).classed("selected", false)
+                mouseOff()
+            })
+        }
 
 }
 
 
-// Load and display countries
-// d3.json("data/countries-topo.json", function (error, world) {
-//     if (error) console.log(error);
-
-//     var countries = topojson.feature(world, world.objects.countries).features;
-//     //console.log(countries);
-    
-//     svg.selectAll("path")
-//         .data(countries)
-//         .enter().append("path")
-//         .attr("d", path)
-//         .on("mouseover", function(d) {
-//             d3.select(this).classed("selected", true)
-//         })
-//         .on("mouseout", function(d) {
-//             d3.select(this).classed("selected", false)
-//         })
-// });
 
 // Load temperature data
-// d3.csv("data/temp_data.csv", function (error, data) {
+// d3.csv("data/temperature_data.csv", function (error, data) {
 //     if (error) console.log(error);
 //     console.log("csv data:", data)
 // })

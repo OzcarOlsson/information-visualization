@@ -36,3 +36,18 @@
   font: 15px "Bahnschrift";
   font-weight: 700;
 }
+
+
+div.tooltip {	
+  position: absolute;			
+  width: 170px;					
+  height: "100%";					
+  text-align: center;
+  padding: 10px;						
+  background: #fff;	
+  border: 0px;		
+  border-radius: 12px;			
+  pointer-events: none;
+  font: 15px "Bahnschrift";
+  font-weight: 400;			
+}
