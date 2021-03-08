@@ -99,7 +99,7 @@ function lineChart(data, countryArr) {
   //     return d.avgTemp
   //   })
   // )
-  y.domain(d3.extent([-0.5, 2]))
+  y.domain(d3.extent([-3, 5]))
   svg
     .append('g')
     .attr('class', 'x-axis')

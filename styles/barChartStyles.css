@@ -29,7 +29,7 @@
   font-size: 1.2em;
 }
 
-.testlol {
+/* .testlol {
   text-shadow: 1px 1px 2px black;
 }
 
@@ -40,7 +40,7 @@
 #testClass {
   overflow: inherit;
   margin-left: 1vw;
-}
+} */
 
 .filled {
   fill: url(#gradient);

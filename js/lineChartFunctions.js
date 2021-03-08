@@ -59,6 +59,7 @@ function leastSquare(parsedData) {
 
     // Calculate k and m in y = kx + m
     let k = (counter * xySum - xSum * ySum) / (counter * xxSum - xSum * xSum)
+    console.log(k)
 
     let m = ySum / counter - (k * xSum) / counter
     // Returning the x and y data points
@@ -73,7 +74,6 @@ function leastSquare(parsedData) {
         yVal: +y,
       })
     }
-
     let km = { kVal: k, mVal: m }
 
     let lastSlot = res.length - 1

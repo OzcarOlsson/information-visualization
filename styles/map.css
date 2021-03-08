@@ -1,0 +1,56 @@
+.ticks {
+  font: 13px 'Bahnschrift';
+}
+.track,
+.track-inset,
+.track-overlay {
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: #000;
+  stroke-opacity: 0.3;
+  stroke-width: 10px;
+}
+
+.track-inset {
+  stroke: #d3d3d3;
+  stroke-width: 12px;
+}
+
+.track-overlay {
+  pointer-events: stroke;
+  stroke-width: 50px;
+  stroke: transparent;
+  cursor: pointer;
+}
+
+.handle {
+  fill: #d3d3d3;
+  stroke: #000;
+  stroke-opacity: 0.5;
+  stroke-width: 1.25px;
+}
+
+.label {
+  font: 15px 'Bahnschrift';
+  font-weight: 700;
+}
+
+div.tooltip {
+  position: absolute;
+  width: 170px;
+  height: '100%';
+  text-align: center;
+  padding: 10px;
+  background: #fff;
+  border: 0px;
+  border-radius: 12px;
+  pointer-events: none;
+  font: 15px 'Bahnschrift';
+  font-weight: 400;
+}
+
+.selected {
+  fill: yellow;
+}

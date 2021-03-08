@@ -1,3 +1,7 @@
+* {
+  /* font-family: Signika, 'sans-serif'; */
+  font-family: Signika;
+}
 body {
   background-color: #bebebe;
   display: flex;
@@ -15,12 +19,13 @@ body {
   /* border: 1px solid red; */
   width: 100vw;
   height: 100vh;
+  padding: 0px 40px 0 40px;
 }
 
 #topWrapper {
   height: 75%;
   /* background-color: #ededed; */
-  width: 95%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
