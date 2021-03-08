@@ -1,7 +1,3 @@
-// Do something nice
-
-// test data with just a few data points for testing purposes
-
 queue()
   .defer(d3.csv, 'data/temp_data.csv')
   .defer(d3.json, 'data/countries-topo.json')
