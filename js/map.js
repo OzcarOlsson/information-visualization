@@ -13,13 +13,13 @@ function map(temperature_data, country_data, continent_data){
     d3.select("#countryButton").on("click", () => {
         mapSelection.name = "country";
         mapSelection.data = country_data;
-        update(sliderYear, mapSelection)
+        updateMap(sliderYear, mapSelection)
     })
 
     d3.select("#continentButton").on("click", () => {
         mapSelection.name = "continent";
         mapSelection.data = continent_data;
-        update(sliderYear, mapSelection)
+        updateMap(sliderYear, mapSelection)
     })
 
     var updatedTempData = parseData(sliderYear); // init
@@ -46,8 +46,8 @@ function map(temperature_data, country_data, continent_data){
     
     // Set map projection - round to flat
     var projection = d3.geoMercator()
-        .translate([width * 0.5, height * 0.6])
-        .scale(120);
+        .translate([width * 0.5, height * 0.7])
+        .scale(220);
     
     var svg = d3.select("#map").append("svg")
         .attr("height", height)
@@ -84,7 +84,8 @@ function map(temperature_data, country_data, continent_data){
     const temp_range = [-0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3];
     const color_legend = d3.scaleThreshold()
         .range(["#FFFFB7", "#FFCE03", "#FD9A01","#FD6104","#FF2C05","#F00505"])
-        .domain(temp_range);
+        .domain(temp_range)
+        
 
     let worldMap = svg.selectAll("path")
         .data(topoCountries(updatedTempData, mapSelection))
@@ -154,9 +155,9 @@ function map(temperature_data, country_data, continent_data){
         max_year = yearRange.slice(-2)[0];
 
     var sliderSvg = d3.select("#timeSlider"),
-        margin = {right: 100, left: 50, top: 150},
-        width = 700, //sliderSvg.attr("width") - margin.left - margin.right,
-        height = 150; //sliderSvg.attr("height");
+        margin = {left: 500, top: 100},
+        width = 1000, //sliderSvg.attr("width") + margin.left,
+        height = 150 //sliderSvg.attr("height") + margin.top;
 
     var x = d3.scaleLinear()
         .domain([min_year, max_year])
@@ -180,7 +181,7 @@ function map(temperature_data, country_data, continent_data){
             .on("start drag", function() {
                 currentValue = d3.event.x;
                 sliderYear = Math.round(x.invert(currentValue));
-                update(sliderYear, mapSelection); 
+                updateMap(sliderYear, mapSelection); 
             })
         );
         
@@ -205,7 +206,7 @@ function map(temperature_data, country_data, continent_data){
         .attr("transform", "translate(0," + (-25) + ")")
 
 
-    function update(sliderYear, mapSelection) {
+    function updateMap(sliderYear, mapSelection) {
 
         handle.attr("cx", x(sliderYear));
 
@@ -220,7 +221,6 @@ function map(temperature_data, country_data, continent_data){
 
         worldMap = svg.selectAll("path")
             .data(topoCountries(updatedTempData, mapSelection))
-
             .enter().append("path")
             .attr("d", path)
             .style("fill", function(d){
@@ -247,19 +247,3 @@ function map(temperature_data, country_data, continent_data){
         }
 
 }
-
-
-
-// Load temperature data
-// d3.csv("data/temperature_data.csv", function (error, data) {
-//     if (error) console.log(error);
-//     console.log("csv data:", data)
-// })
-
-// --- Other solution on map --- //
-// var mymap = L.map('map').setView([10, 0], 1);
-
-// L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-//     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-// }).addTo(mymap);
-
