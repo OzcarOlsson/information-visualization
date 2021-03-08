@@ -102,7 +102,7 @@ function lineChart(data, countryArr) {
   //     return d.avgTemp
   //   })
   // )
-  y.domain(d3.extent([-3, 5]))
+  y.domain(d3.extent([-3, 4]))
   svg
     .append('g')
     .attr('class', 'x-axis')
@@ -143,6 +143,7 @@ function lineChart(data, countryArr) {
     .style('stroke-dasharray', '3, 3')
     .style('fill', 'none')
     .style('opacity', 0.5)
+
   // Least square regression line
   let lsLine = svg
     .append('g')
@@ -188,9 +189,7 @@ function lineChart(data, countryArr) {
     row.addEventListener('click', (e) => {
       e.preventDefault()
       updateType.name = 'redraw'
-      // console.log(e.target.id)
       handleClick(e.target.id)
-      // updateAxis(parseData(data, e.target.id), x, y, svg, 'update')
       update(e.target.id, data, line, lsLine, x, y, svg, updateType)
     })
   })
@@ -220,6 +219,5 @@ function lineChart(data, countryArr) {
       legendSetup('compare', data, compareLine, compareLsLine, x, y, svg, selectedCompare, updateType)
       updateType.name = 'redraw'
     }
-    updateType.axis = false
   })
 }

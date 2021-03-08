@@ -87,83 +87,29 @@ function mychart2(data, arr) {
       return d.tmp.toFixed(3) + '°C'
     })
 
-  let sizeFont = my.append('p');
-  sizeFont.attr('class', 'country')
-  .style("font-size", "14px")  
+  let sizeFont = my.append('p')
+  sizeFont
+    .attr('class', 'country')
+    .style('font-size', '14px')
     .attr('id', (d) => {
-      // if(d.country.includes(",")){
-      //   console.log(d.country.split(",")[0])
-      //   return d.country.split(",")[0]
-      // }
-      return d.country.split(" ")[0]
+      return d.country.split(' ')[0]
     })
     .text((d) => {
+      if (d.country == 'China, mainland') {
+        d3.select(`#${d.country.split(',')[0]}`).style('font-size', '14px')
+      } else {
+        d3.select(`#${d.country.split(' ')[0]}`).style('font-size', '14px')
+      }
 
-      if(d.country=="China, mainland"){
-        d3.select(`#${d.country.split(",")[0]}`).style("font-size", "14px")       
-      }
-      else{
-        d3.select(`#${d.country.split(" ")[0]}`).style("font-size", "14px")                
-      }
-      
-      
-      //   else{
-      //     // d3.select(`#${d.country.split(" ")[0]}`).style("font-size", "12px")                
-      //   }
-          
-      
-      if(d.country.length>17&&!(d.country.includes("Svalbard"))){
-        if((d.country.includes("Russian"))) return d.country
-        if(d.country.includes("Dominican")){
-          return d.country.substring(0,14)+"..."
+      if (d.country.length > 17 && !d.country.includes('Svalbard')) {
+        if (d.country.includes('Russian')) return d.country
+        if (d.country.includes('Turks') || d.country.includes('Dominican')) {
+          return d.country.substring(0, 10) + '...'
         }
-        return d.country.substring(0,16)+"...";
+        return d.country.substring(0, 16) + '...'
       }
       return d.country
     })
-  //Create a rect-element and set width and height.
-  // my.append("div")
-  //   .attr("width", function (d) {
-  //     return x(d.tmp / 1);
-  //   })
-  //   .attr("height", barHeight - 1)
-  //   //   .attr("class", "filled")
-  //   .style("stroke", "black")
-  //   .style("fill", function (d) {
-  //     let jj = calcColor(d.tmp);
-  //     return jj;
-  //   })
-  //   .style("filter", "drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3))");
-
-  //Append a text-element that writes out the temperature
-  // my.append("text")
-  //   .text(function (d) {
-  //     return d.tmp.toFixed(3) + "°C";
-  //   })
-  //   .attr("y", barHeight / 2)
-  //   .attr("dy", ".35em")
-  //   .attr("x", 5)
-  //   .style("font-family", "Arvo")
-  //   .style("font-size", ".7vw")
-  //   .attr("fill", "white")
-  //   .attr("class", "testlol");
-
-  // //Append another text-element that writes out the country, added some css aswell.
-  // my.append("text")
-  //   .text(function (d) {
-  //     return d.country;
-  //   })
-  //   .attr("y", barHeight / 2)
-  //   .attr("dy", ".35em")
-  //   .attr("x", function (d) {
-  //     return d.tmp * 196;
-  //   })
-  //   .attr("text-anchor", "end")
-  //   .style("font-family", "Arvo")
-  //   .style("font-size", ".7vw")
-  //   .style("margin-left", "1vw")
-  //   .style("fill", "white")
-  //   .attr("class", "testlol");
 
   //This function takes in the individual values of the temperatures.
   //The input is sorted from highest to lowest, so the first value will be the largest, therefore
@@ -189,26 +135,6 @@ function mychart2(data, arr) {
     let returnRGB = 'rgb(' + returnArr.join(',') + ')'
     return returnRGB
   }
-
-  // let lel = d3.select("#StartSpan")
-  // .selectAll('option')
-  // .append('option')
-  // .data( yearSpan)
-  // .enter()
-  // .append('option')
-  // .text(function(d){
-  //     return (d);
-  // })
-
-  // let lel2 = d3.select("#EndSpan")
-  // .selectAll('myOption')
-  // .append('option')
-  // .data(yearSpan)
-  // .enter()
-  // .append('option')
-  // .text(function(d){
-  //     return (d);
-  // })
 
   function calcAvarage(d, years = d.length) {
     let avg = []
