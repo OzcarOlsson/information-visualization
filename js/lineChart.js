@@ -1,5 +1,5 @@
 function lineChart(data, countryArr) {
-  const data2 = parseData(data, 'Sweden')
+  const data2 = parseData(data, 'World')
   const ls = leastSquare(data2)
   const leastSquareLine = [ls[0], ls[1]]
 
@@ -24,7 +24,7 @@ function lineChart(data, countryArr) {
   let width = svgWidth - margin.left - margin.right
   let height = svgHeight - margin.top - margin.bottom
 
-  d3.select('#graphContainer').append('p').attr('id', 'graphHeadline').attr('style', 'margin-left: 10px').text('Showing (Sweden)')
+  d3.select('#graphContainer').append('p').attr('id', 'graphHeadline').attr('style', 'margin-left: 10px').text('Showing (World)')
   // Future prediciton
   d3.select('#futureButton').on('click', () => {
     let choice = d3.select('#selectButton').property('value')
@@ -42,9 +42,10 @@ function lineChart(data, countryArr) {
     updateType.mainLine = true
     updateType.mainRegression = true
     updateType.refresh = true
-    updateAxis(parseData(data, choice), x, y, svg)
+    updateAxis(parseData(data, choice), x, y, svg, 'history')
     update(choice, data, line, lsLine, x, y, svg, updateType)
-    d3.select('#compareSelect').property('disabled', 'false')
+    // d3.select('#compareSelect').property('disabled', 'false')
+    historyMode()
   })
 
   let svg = d3
@@ -93,19 +94,17 @@ function lineChart(data, countryArr) {
       return d.dt
     })
   )
-  y.domain(
-    d3.extent(data2, (d) => {
-      return d.avgTemp
-    })
-  )
-
+  // y.domain(
+  //   d3.extent(data2, (d) => {
+  //     return d.avgTemp
+  //   })
+  // )
+  y.domain(d3.extent([-0.5, 2]))
   svg
     .append('g')
     .attr('class', 'x-axis')
     .attr('transform', 'translate(0,' + height + ')')
     .call(xAxis)
-    .select('.domain')
-    .remove()
 
   svg
     .append('g')
@@ -178,17 +177,19 @@ function lineChart(data, countryArr) {
     .on('mouseover', handleMouseIn)
     .on('mouseout', handleMouseOut)
 
-  legendSetup('main', data, line, lsLine, x, y, svg, 'Sweden', updateType)
+  legendSetup('main', data, line, lsLine, x, y, svg, 'World', updateType)
 
-  let selectElement = document.querySelector('#countryTable')
+  let selectElement = document.querySelector('#bars-container')
 
-  selectElement.querySelectorAll('p.country').forEach((row) => {
+  selectElement.querySelectorAll('div.temp-bar').forEach((row) => {
     row.addEventListener('click', (e) => {
+      e.preventDefault()
       updateType.name = 'redraw'
+      console.log(e.target.id)
+      updateAxis(parseData(data, e.target.id), x, y, svg, 'update')
       update(e.target.id, data, line, lsLine, x, y, svg, updateType)
     })
   })
-
   // Onchange event for dropdown list with countries
   d3.select('#selectButton').on('change', function () {
     let selectedOption = d3.select(this).property('value').toString()

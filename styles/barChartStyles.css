@@ -1,0 +1,47 @@
+/* OScAR SHIT */
+#bars-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.temp-bar {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  padding-left: 5px;
+  margin: 2px 0 2px 20px;
+  cursor: pointer;
+}
+
+.temp-bar:hover {
+  opacity: 0.75;
+}
+.country {
+  margin-left: 10px;
+}
+
+#RightHeader {
+  /* font-family: Arvo; */
+  margin-left: 1.3vw;
+  /* color: white; */
+  /* text-shadow: 1px 1px 2px black; */
+  font-size: 1.2em;
+}
+
+.testlol {
+  text-shadow: 1px 1px 2px black;
+}
+
+#testTable {
+  font-family: Arvo;
+}
+
+#testClass {
+  overflow: inherit;
+  margin-left: 1vw;
+}
+
+.filled {
+  fill: url(#gradient);
+}

@@ -263,21 +263,24 @@ function updateCompareLine(selectedOption, data, compareLine, compareLsLine, x, 
 }
 
 // Axis update
-function updateAxis(data, x, y, svg) {
+function updateAxis(data, x, y, svg, type) {
   //Rescale axes
-  x.domain(
-    d3.extent(data, (d) => {
-      return d.dt
-    })
-  )
+
+  if (type == 'history') {
+    x.domain(
+      d3.extent(data, (d) => {
+        return d.dt
+      })
+    )
+    let xAxis = d3.axisBottom(x)
+    svg.select('.x-axis').transition().duration(1500).call(xAxis)
+  }
   y.domain(
     d3.extent(data, (d) => {
       return d.avgTemp
     })
   )
-  let xAxis = d3.axisBottom(x)
   let yAxis = d3.axisLeft(y)
 
-  svg.select('.x-axis').transition().duration(1500).call(xAxis)
   svg.select('.y-axis').transition().duration(1500).call(yAxis)
 }

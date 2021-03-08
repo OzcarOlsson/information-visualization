@@ -100,7 +100,6 @@ function legendSetup(legendContent, data, line, lsLine, x, y, svg, selectedOptio
       .style('cursor', 'pointer')
       .text(selectedOption)
       .on('click', () => {
-        // visOptions.firstLine = !visOptions.firstLine
         let choice = d3.select('#selectButton').property('value')
         updateType.name = 'redraw'
         updateType.mainLine = !updateType.mainLine
@@ -131,7 +130,7 @@ function legendSetup(legendContent, data, line, lsLine, x, y, svg, selectedOptio
       .attr('cy', 60)
       .attr('r', 5)
       .style('fill', 'black')
-    // TODO FIX
+
     d3.select('#legend')
       .append('text')
       .attr('class', 'legend-second-text')
@@ -180,6 +179,10 @@ function futurePredMode() {
   d3.select('.legend-second-circle').remove()
   d3.select('.legend-second-text').remove()
   d3.select('.legend-second-regression-text').remove()
+}
+
+function historyMode() {
+  d3.select('#compareSelect').property('disabled', 'false')
 }
 
 function handleMouseIn(d, i) {
