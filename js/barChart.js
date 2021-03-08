@@ -89,6 +89,7 @@ function mychart2(data, arr) {
 
   let sizeFont = my.append('p');
   sizeFont.attr('class', 'country')
+  .style("font-size", "14px")  
     .attr('id', (d) => {
       // if(d.country.includes(",")){
       //   console.log(d.country.split(",")[0])
@@ -97,14 +98,26 @@ function mychart2(data, arr) {
       return d.country.split(" ")[0]
     })
     .text((d) => {
-      if(d.country.includes(",")||d.country.includes("(")||d.country.length>17&&d.tmp<1.4){
-        if(d.country.split(" ")[0].includes(",")){
-          d3.select(`#${d.country.split(",")[0]}`).style("font-size", "16px")                
-        }
-        else{
-          d3.select(`#${d.country.split(" ")[0]}`).style("font-size", "12px")                
-        }
+
+      if(d.country=="China, mainland"){
+        d3.select(`#${d.country.split(",")[0]}`).style("font-size", "14px")       
+      }
+      else{
+        d3.select(`#${d.country.split(" ")[0]}`).style("font-size", "14px")                
+      }
+      
+      
+      //   else{
+      //     // d3.select(`#${d.country.split(" ")[0]}`).style("font-size", "12px")                
+      //   }
           
+      
+      if(d.country.length>17&&!(d.country.includes("Svalbard"))){
+        if((d.country.includes("Russian"))) return d.country
+        if(d.country.includes("Dominican")){
+          return d.country.substring(0,14)+"..."
+        }
+        return d.country.substring(0,17)+"...";
       }
       return d.country
     })
