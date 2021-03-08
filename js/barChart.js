@@ -117,7 +117,7 @@ function mychart2(data, arr) {
         if(d.country.includes("Dominican")){
           return d.country.substring(0,14)+"..."
         }
-        return d.country.substring(0,17)+"...";
+        return d.country.substring(0,16)+"...";
       }
       return d.country
     })
