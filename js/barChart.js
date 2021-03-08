@@ -71,9 +71,9 @@ function mychart2(data, arr) {
       return d.country
     })
     .style('width', (d) => {
-      return `${x(d.tmp) / 1.5}px`
+      return `${x(d.tmp) / 1.2}px`
     })
-    .style('height', '40px')
+    .style('height', '30px')
     .style('background-color', (d) => {
       let jj = calcColor(d.tmp)
       return `${jj}`
@@ -87,12 +87,38 @@ function mychart2(data, arr) {
       return d.tmp.toFixed(3) + '°C'
     })
 
-  my.append('p')
-    .attr('class', 'country')
+  let sizeFont = my.append('p');
+  sizeFont.attr('class', 'country')
+  .style("font-size", "14px")  
     .attr('id', (d) => {
-      return d.country
+      // if(d.country.includes(",")){
+      //   console.log(d.country.split(",")[0])
+      //   return d.country.split(",")[0]
+      // }
+      return d.country.split(" ")[0]
     })
     .text((d) => {
+
+      if(d.country=="China, mainland"){
+        d3.select(`#${d.country.split(",")[0]}`).style("font-size", "14px")       
+      }
+      else{
+        d3.select(`#${d.country.split(" ")[0]}`).style("font-size", "14px")                
+      }
+      
+      
+      //   else{
+      //     // d3.select(`#${d.country.split(" ")[0]}`).style("font-size", "12px")                
+      //   }
+          
+      
+      if(d.country.length>17&&!(d.country.includes("Svalbard"))){
+        if((d.country.includes("Russian"))) return d.country
+        if(d.country.includes("Dominican")){
+          return d.country.substring(0,14)+"..."
+        }
+        return d.country.substring(0,17)+"...";
+      }
       return d.country
     })
   //Create a rect-element and set width and height.
