@@ -59,7 +59,6 @@ function leastSquare(parsedData) {
 
     // Calculate k and m in y = kx + m
     let k = (counter * xySum - xSum * ySum) / (counter * xxSum - xSum * xSum)
-    console.log(k)
 
     let m = ySum / counter - (k * xSum) / counter
     // Returning the x and y data points
@@ -90,7 +89,13 @@ function leastSquare(parsedData) {
 function legendSetup(legendContent, data, line, lsLine, x, y, svg, selectedOption, updateType) {
   if (legendContent == 'main') {
     //Legend
-    d3.select('#legend').append('circle').attr('cx', 20).attr('cy', 20).attr('r', 5).style('fill', '#ffab00')
+    d3.select('#legend')
+      .append('circle')
+      .attr('class', 'legend-first-circle')
+      .attr('cx', 20)
+      .attr('cy', 20)
+      .attr('r', 5)
+      .style('fill', '#ffab00')
 
     d3.select('#legend')
       .append('text')
@@ -107,13 +112,20 @@ function legendSetup(legendContent, data, line, lsLine, x, y, svg, selectedOptio
         d3.select('.legend-first-text').style('opacity', updateType.mainLine ? 1.0 : 0.5)
       })
 
-    d3.select('#legend').append('rect').attr('x', 15).attr('y', 40).attr('width', 10).attr('height', 2).style('fill', 'green')
+    d3.select('#legend')
+      .append('rect')
+      .attr('class', 'legend-regression-rect')
+      .attr('x', 15)
+      .attr('y', 40)
+      .attr('width', 10)
+      .attr('height', 2)
+      .style('fill', 'green')
     d3.select('#legend')
       .append('text')
       .attr('class', 'legend-regression-text')
       .attr('x', 30)
       .attr('y', 45)
-      .text('Linear Regression')
+      .text('Linear Regression' + ` (${selectedOption})`)
       .style('cursor', 'pointer')
       .on('click', () => {
         let choice = d3.select('#selectButton').property('value')
@@ -159,7 +171,7 @@ function legendSetup(legendContent, data, line, lsLine, x, y, svg, selectedOptio
       .attr('class', 'legend-second-regression-text')
       .attr('x', 30)
       .attr('y', 85)
-      .text('Linear Regression')
+      .text('Linear Regression' + ` (${selectedOption})`)
       .style('cursor', 'pointer')
       .on('click', () => {
         let choice = d3.select('#compareSelect').property('value')
@@ -174,15 +186,43 @@ function legendSetup(legendContent, data, line, lsLine, x, y, svg, selectedOptio
 function futurePredMode() {
   d3.selectAll('.dot2').remove()
   d3.selectAll('.secondLine').remove()
+  d3.select('.legend-first-circle').remove()
+  d3.select('.legend-first-text').remove()
+
   d3.select('#compareSelect').property('disabled', 'true').property('value', 'None')
   d3.select('.legend-second-rect').remove()
   d3.select('.legend-second-circle').remove()
   d3.select('.legend-second-text').remove()
   d3.select('.legend-second-regression-text').remove()
+
+  d3.select('#historyButton')
+    .style('opacity', 1.0)
+    .style('cursor', 'pointer')
+    .on('mouseover', function (d) {
+      d3.select(this).style('background-color', 'rgb(55, 48, 163)')
+    })
+    .on('mouseout', function (d) {
+      d3.select(this).style('background-color', '#4338ca')
+    })
+  document.getElementById('historyButton').disabled = false
+
+  d3.select('#futureButton').style('opacity', 0.5).style('cursor', 'default')
+  document.getElementById('futureButton').disabled = true
 }
 
 function historyMode() {
-  d3.select('#compareSelect').property('disabled', 'false')
+  d3.select('.legend-regression-rect').remove()
+  d3.select('.legend-regression-text').remove()
+
+  document.getElementById('compareSelect').disabled = false
+
+  d3.select('#futureButton').style('opacity', 1.0).style('cursor', 'pointer')
+
+  document.getElementById('futureButton').disabled = false
+
+  d3.select('#historyButton').style('opacity', 0.5).style('cursor', 'default')
+
+  document.getElementById('historyButton').disabled = true
 }
 
 function handleMouseIn(d, i) {
@@ -210,6 +250,17 @@ function handleMouseOut(d) {
 
   d3.select('.textBox').remove()
   d3.select('#t').remove()
+}
+
+function handleClick(target) {
+  selection = document.getElementById('selectButton')
+  options = selection.options
+  for (let i = 0; i < options.length; ++i) {
+    if (options[i].value === target) {
+      options[i].selected = 'selected'
+      break
+    }
+  }
 }
 
 // Future prediciton

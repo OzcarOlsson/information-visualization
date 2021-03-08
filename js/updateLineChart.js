@@ -5,15 +5,18 @@ function update(selectedOption, data, line, lsLine, x, y, svg, updateType) {
 
   // Graph Headline
   let str = document.getElementById('graphHeadline').innerHTML
-  if (str.includes('compared')) {
+  if (str.includes('compared') && !updateType.futureLine) {
     let modifiedStr = str.split('compared')
     document.getElementById('graphHeadline').innerHTML = `Showing (${selectedOption}) compared ${modifiedStr[1]}`
+  } else if (updateType.futureLine) {
+    document.getElementById('graphHeadline').innerHTML = `Showing (${selectedOption}) future prediction with linear regression`
   } else {
     document.getElementById('graphHeadline').innerHTML = `Showing (${selectedOption})`
   }
 
   //Legend update
-  d3.select('#legend text').text(selectedOption)
+  d3.select('.legend-first-text').text(selectedOption)
+  d3.select('.legend-regression-text').text(`Linear Regression (${selectedOption})`)
 
   let lineData = updateType.mainLine ? newData : []
   // let lineData = temp
@@ -98,7 +101,9 @@ function update(selectedOption, data, line, lsLine, x, y, svg, updateType) {
 }
 
 function updateCompareLine(selectedOption, data, compareLine, compareLsLine, x, y, svg, updateType) {
-  // let mainLineData = d3.select('.firstLine')._groups[0][0].__data__[0].dt.getFullYear()
+  // Legend update
+  d3.select('.legend-second-text').text(selectedOption)
+  d3.select('.legend-second-regression-text').text(`Linear Regression (${selectedOption})`)
 
   if (updateType.counter == 1 && updateType.name == 'init') {
     document.getElementById('graphHeadline').innerHTML += ` compared to  (${selectedOption})`
@@ -131,8 +136,6 @@ function updateCompareLine(selectedOption, data, compareLine, compareLsLine, x, 
     if (updateType.compareRegression && selectedOption != 'None' && !updateType.futureLine) {
       let rd = updateType.compareRegression ? leastSquare(parseData(data, selectedOption)) : []
       regressionData = [rd[0], rd[1]]
-
-      console.log('Hej')
     } else if (updateType.futureLine) {
       regressionData = []
     }
@@ -266,21 +269,23 @@ function updateCompareLine(selectedOption, data, compareLine, compareLsLine, x, 
 function updateAxis(data, x, y, svg, type) {
   //Rescale axes
 
-  if (type == 'history') {
-    x.domain(
-      d3.extent(data, (d) => {
-        return d.dt
-      })
-    )
-    let xAxis = d3.axisBottom(x)
-    svg.select('.x-axis').transition().duration(1500).call(xAxis)
-  }
-  y.domain(
+  x.domain(
     d3.extent(data, (d) => {
-      return d.avgTemp
+      return d.dt
     })
   )
-  let yAxis = d3.axisLeft(y)
 
+  y.domain(d3.extent([-3, 5]))
+
+  let yAxis = d3.axisLeft(y)
+  let xAxis = d3.axisBottom(x)
+  svg.select('.x-axis').transition().duration(1500).call(xAxis)
   svg.select('.y-axis').transition().duration(1500).call(yAxis)
+  // } else {
+  //   y.domain(
+  //     d3.extent(data, (d) => {
+  //       return d.avgTemp
+  //     })
+  //   )
+  // }
 }

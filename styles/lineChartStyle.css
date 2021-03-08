@@ -12,10 +12,9 @@
 /* Legend */
 #legendContainer {
   background-color: #ededed;
-
   position: absolute;
-  top: 10px;
-  right: 10px;
+  bottom: 20px;
+  left: 20px;
   border-radius: 5px;
 }
 .selectionContainer {
@@ -27,15 +26,27 @@
   /* justify-content: space-between; */
 }
 
+#selectButton {
+  border: 1px solid black;
+}
+
+#compareSelect {
+  border: 1px solid black;
+}
+
 #futureButton {
   position: absolute;
   bottom: 20px;
-  left: 20px;
+  right: 120px;
   /* margin-left: 20px; */
+}
+
+#futureButton:hover {
+  background-color: rgb(55, 48, 163);
 }
 
 #historyButton {
   position: absolute;
   bottom: 20px;
-  left: 200px;
+  right: 10px;
 }

@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="./styles/tailwind.css">
 
 	<!-- <link rel="preconnect" href="https://fonts.gstatic.com"> -->
-<link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
 	<!-- <script src="https://d3js.org/d3.v5.min.js" defer></script> -->
 <script src="http://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
 <script src="https://d3js.org/d3-scale.v3.min.js" defer></script>
@@ -46,21 +46,23 @@
 </head>
 <body>
 	<div id="wrapper">
+		<div id="header"><h1>Visualization of Global Temperature changes
+		</h2></div>
 		<div id="topWrapper">
 			<div id="graphContainer"> 
-				<div id="legendContainer"><svg id="legend" width=170 height=100></svg></div>
+				<div id="legendContainer"><svg id="legend" width=500 height=100></svg></div>
 				<div class="selectionContainer">
 					<div id="selectButtonContainer">
-						<label for="selection" >Choose a country:</label>
+						<label for="selection" >Choose a country or region:</label>
 						<select id="selectButton" name="selection" style="width:200px;"><option class="listRow">World</option></select>
 					</div>
 					<div class="compareSelectContainer" style=" margin-left:50px">
-						<label for="compSel">Compare with country:</label>
+						<label for="compSel">Compare with country or region:</label>
 						<select id="compareSelect" name="compSel" style="width:200px;"><option class="compListRow">None</option></select>
 					</div>
 				</div>
-				<button id="futureButton"  class="h-12 w-32 px-5 m-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">Future Prediction</button>
-				<button id="historyButton"  class="h-12 w-32 px-5 m-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">Measured Data</button>
+				<button id="futureButton"  class="h-8 w-24 px-2 text-white  bg-indigo-700 rounded-lg focus:outline-none">Future</button>
+				<button id="historyButton"  class="h-8 w-24 px-2 text-white  bg-indigo-700 rounded-lg focus:outline-none">Historical</button>
 			</div>
 			<div id="rightContainer">
 				<!-- Average temperature deviation  -->

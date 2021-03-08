@@ -18,7 +18,7 @@ function lineChart(data, countryArr) {
   let containerWidth = document.getElementById('graphContainer').offsetWidth
   let containerHeight = document.getElementById('graphContainer').offsetHeight
   let svgWidth = containerWidth - 50,
-    svgHeight = containerHeight - 200
+    svgHeight = containerHeight - 250
   // svgHeight = 800
   let margin = { top: 20, right: 20, bottom: 30, left: 50 }
   let width = svgWidth - margin.left - margin.right
@@ -42,11 +42,14 @@ function lineChart(data, countryArr) {
     updateType.mainLine = true
     updateType.mainRegression = true
     updateType.refresh = true
-    updateAxis(parseData(data, choice), x, y, svg, 'history')
+    updateAxis(parseData(data, choice), x, y, svg)
     update(choice, data, line, lsLine, x, y, svg, updateType)
-    // d3.select('#compareSelect').property('disabled', 'false')
+    legendSetup('main', data, line, lsLine, x, y, svg, choice, updateType)
     historyMode()
   })
+
+  d3.select('#historyButton').style('opacity', 0.5).style('cursor', 'default')
+  document.getElementById('historyButton').disabled = true
 
   let svg = d3
     .select('#graphContainer')
@@ -185,8 +188,9 @@ function lineChart(data, countryArr) {
     row.addEventListener('click', (e) => {
       e.preventDefault()
       updateType.name = 'redraw'
-      console.log(e.target.id)
-      updateAxis(parseData(data, e.target.id), x, y, svg, 'update')
+      // console.log(e.target.id)
+      handleClick(e.target.id)
+      // updateAxis(parseData(data, e.target.id), x, y, svg, 'update')
       update(e.target.id, data, line, lsLine, x, y, svg, updateType)
     })
   })
