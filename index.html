@@ -4,25 +4,62 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale= 1.0">
 	<title>Tourigt Projekt</title>
-
-
-	<link rel="stylesheet" href="style.css">
-
-
+	<!-- STYLES -->
+	<link rel="stylesheet" href="./styles/style.css">
+	<link rel="stylesheet" href="./styles/lineChartStyle.css">
+<link rel="stylesheet" href="./styles/barChartStyles.css">
 
 	<script src="https://d3js.org/d3.v5.min.js" defer></script>
 	<script src="https://d3js.org/d3-scale.v3.min.js" defer></script>
+
+	<!-- Todo maybe remove this -->
+	<script src="./lib/queue/queue.js" type='text/javascript'></script>
+	
+	<!-- JS-legendernas filer -->
 	<script src="./js/main.js" defer></script>
+	<script src="./js/lineChart.js" defer></script>
+	<script src="./js/cList.js" defer></script>
+	<script src="./js/lineChartFunctions.js" defer></script>
+	<script src="./js/updateLineChart.js" defer></script>
+	<script src="./js/barChart.js" defer></script>
+
+
+
+
+
+	<!-- <script src="./js/testChart.js" defer></script> -->
+
+
 </head>
 <body>
 	<div id="wrapper">
 		<div id="topWrapper">
-			<div id="graphContainer"> En tourig graf här</div>
-			<div id="rightContainer"> Något annat tourigt här kanske</div>
+			<div id="graphContainer"> 
+				<div id="legendContainer"><svg id="legend" width=170 height=100></svg></div>
+				<div class="selectionContainer">
+					<div id="selectButtonContainer">
+						<label for="selection" >Choose a country:</label>
+						<select id="selectButton" name="selection" style="width:200px;"><option class="listRow">World</option></select>
+					</div>
+					<div class="compareSelectContainer" style=" margin-left:50px">
+						<label for="compSel">Compare with country:</label>
+						<select id="compareSelect" name="compSel" style="width:200px;"><option class="compListRow">None</option></select>
+					</div>
+				</div>
+				<button id="futureButton">Future Prediction</button>
+				<button id="historyButton">Measured Data</button>
+			</div>
+			<div id="rightContainer">
+				<!-- Average temperature deviation  -->
+				<p id="RightHeader">Avarage temperature deviation for the last 20 years.</p>
+				<!-- <ul id="countryTable"></ul> -->
+				<div id="bars-container">
+				</div>
+			</div>
 		</div>
 		<div id="bottomContainer" >Lite touriga verktyg eller ngt sånt</div>
 	</div>
-	<!-- <svg></svg> -->
+	
 </body>
 
 </html>
