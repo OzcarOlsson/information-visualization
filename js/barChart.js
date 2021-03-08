@@ -71,9 +71,9 @@ function mychart2(data, arr) {
       return d.country
     })
     .style('width', (d) => {
-      return `${x(d.tmp) / 1.5}px`
+      return `${x(d.tmp) / 1.2}px`
     })
-    .style('height', '40px')
+    .style('height', '30px')
     .style('background-color', (d) => {
       let jj = calcColor(d.tmp)
       return `${jj}`
@@ -87,12 +87,25 @@ function mychart2(data, arr) {
       return d.tmp.toFixed(3) + '°C'
     })
 
-  my.append('p')
-    .attr('class', 'country')
+  let sizeFont = my.append('p');
+  sizeFont.attr('class', 'country')
     .attr('id', (d) => {
-      return d.country
+      // if(d.country.includes(",")){
+      //   console.log(d.country.split(",")[0])
+      //   return d.country.split(",")[0]
+      // }
+      return d.country.split(" ")[0]
     })
     .text((d) => {
+      if(d.country.includes(",")||d.country.includes("(")||d.country.length>17&&d.tmp<1.4){
+        if(d.country.split(" ")[0].includes(",")){
+          d3.select(`#${d.country.split(",")[0]}`).style("font-size", "16px")                
+        }
+        else{
+          d3.select(`#${d.country.split(" ")[0]}`).style("font-size", "12px")                
+        }
+          
+      }
       return d.country
     })
   //Create a rect-element and set width and height.
