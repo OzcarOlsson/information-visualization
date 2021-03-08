@@ -40,15 +40,20 @@ function map(temperature_data, country_data, continent_data) {
   var margin = { top: 20, left: 20, right: 20, bottom: 20 },
     width = mapDiv.clientWidth - margin.right - margin.left,
     // height = mapDiv.clientHeight - margin.top - margin.bottom;
-    height = 1000
+    height = 500
 
   // Set map projection - round to flat
   var projection = d3
     .geoMercator()
     .translate([width * 0.5, height * 0.7])
-    .scale(220)
+    .scale(130)
 
-  var svg = d3.select('#map').append('svg').attr('height', height).attr('width', width).call(zoom).append('g')
+  var svg = d3.select('#map')
+    .append('svg')
+    .attr('height', height)
+    .attr('width', width)
+    .call(zoom)
+    .append('g')
 
   // Create path using the projection
   var path = d3.geoPath().projection(projection)
@@ -71,8 +76,10 @@ function map(temperature_data, country_data, continent_data) {
     return map
   }
 
-  const temp_range = [-0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3]
-  const color_legend = d3.scaleThreshold().range(['#FFFFB7', '#FFCE03', '#FD9A01', '#FD6104', '#FF2C05', '#F00505']).domain(temp_range)
+  const temp_range = [0, 0.5, 1, 1.5, 2, 2.5, 5]
+  const color_legend = d3.scaleThreshold()
+    .range(['#ffffb2', '#fed976', '#feb24c', '#fd8d3c', '#f03b20', '#bd0026'])
+    .domain(temp_range)
 
   let worldMap = svg
     .selectAll('path')
@@ -91,7 +98,9 @@ function map(temperature_data, country_data, continent_data) {
     .style('stroke', '#000')
     .style('stroke-width', '0.1')
     .on('mouseover', function (d) {
-      d3.select(this).classed('selected', true)
+      d3.select(this)
+        .classed('selected', true)
+        .style("cursor", "pointer")
       if (!d.properties) {
         return
       }
@@ -137,10 +146,23 @@ function map(temperature_data, country_data, continent_data) {
   var min_year = yearRange[0],
     max_year = yearRange.slice(-2)[0]
 
-  var sliderSvg = d3.select('#timeSlider'),
-    margin = { left: 500, top: 100 },
-    width = 1000, //sliderSvg.attr("width") + margin.left,
-    height = 150 //sliderSvg.attr("height") + margin.top;
+  sliderDiv = d3.select('#slider').node()
+
+  var margin = { top: 20, left: 100, right: 100, bottom: 20 },
+    width = sliderDiv.clientWidth - margin.right - margin.left,
+    height = sliderDiv.clientHeight - margin.top - margin.bottom;
+
+  var sliderSvg = d3.select('#timeSlider')
+    .attr('height', height)
+    .attr('width', width)
+    .call(zoom)
+    .append('g')
+
+
+  // var sliderSvg = d3.select('#timeSlider'),
+  //   margin = { left: 130, bottom: 550 },
+  //   width = 500, //sliderDiv.attr("width") + margin.left, //1000
+  //   height = 125 //sliderDiv.attr("height") + margin.top; //150
 
   var x = d3.scaleLinear().domain([min_year, max_year]).range([0, width]).clamp(true)
 
@@ -154,9 +176,6 @@ function map(temperature_data, country_data, continent_data) {
     .attr('class', 'track')
     .attr('x1', x.range()[0])
     .attr('x2', x.range()[1])
-    .select(function () {
-      return this.parentNode.appendChild(this.cloneNode(true))
-    })
     .attr('class', 'track-inset')
     .select(function () {
       return this.parentNode.appendChild(this.cloneNode(true))

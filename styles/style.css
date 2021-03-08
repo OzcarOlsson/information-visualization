@@ -94,3 +94,11 @@ body {
 .boxInfo {
   font-size: 10pt;
 }
+
+.colorBox1 { background-color: #ffffb2; }
+.colorBox2 { background-color: #fed976; }
+.colorBox3 { background-color: #feb24c; }
+.colorBox4 { background-color: #fd8d3c; }
+.colorBox5 { background-color: #f03b20; }
+.colorBox6 { background-color: #bd0026; }
+
