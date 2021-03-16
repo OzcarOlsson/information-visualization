@@ -2,8 +2,8 @@ function map(temperature_data, country_data, continent_data) {
   const yearRange = [...new Set(temperature_data.map((item) => item.year))]
   let sliderYear = '1961' // 1961-2019
 
+  //init:
   let mapSelection = {
-    //init:
     name: 'country',
     data: country_data,
   }
@@ -39,8 +39,8 @@ function map(temperature_data, country_data, continent_data) {
 
   var margin = { top: 20, left: 20, right: 20, bottom: 20 },
     width = mapDiv.clientWidth - margin.right - margin.left,
-    // height = mapDiv.clientHeight - margin.top - margin.bottom;
     height = 500
+    // height = mapDiv.clientHeight - margin.top - margin.bottom;
 
   // Set map projection - round to flat
   var projection = d3
@@ -157,12 +157,6 @@ function map(temperature_data, country_data, continent_data) {
     .attr('width', width)
     .call(zoom)
     .append('g')
-
-
-  // var sliderSvg = d3.select('#timeSlider'),
-  //   margin = { left: 130, bottom: 550 },
-  //   width = 500, //sliderDiv.attr("width") + margin.left, //1000
-  //   height = 125 //sliderDiv.attr("height") + margin.top; //150
 
   var x = d3.scaleLinear().domain([min_year, max_year]).range([0, width]).clamp(true)
 
